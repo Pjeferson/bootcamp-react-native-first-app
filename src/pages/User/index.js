@@ -28,6 +28,7 @@ export default class User extends Component {
       stars: [],
       page: 1,
       loading: false,
+      refreshing: false,
     };
   }
 
@@ -66,6 +67,7 @@ export default class User extends Component {
 
     this.setState({
       stars: [...stars, ...response.data],
+      refreshing: false,
     });
   };
 
@@ -79,9 +81,18 @@ export default class User extends Component {
     this.getStars();
   };
 
+  refreshList = async () => {
+    await this.setState({
+      stars: [],
+      page: 1,
+      refreshing: true,
+    });
+    this.getStars();
+  };
+
   render() {
     const { navigation } = this.props;
-    const { stars, loading } = this.state;
+    const { stars, loading, refreshing } = this.state;
     const user = navigation.getParam('user');
 
     return (
@@ -99,6 +110,8 @@ export default class User extends Component {
           <Stars
             onEndReachedThreshold={0.2}
             onEndReached={this.loadMore}
+            onRefresh={this.refreshList}
+            refreshing={refreshing}
             data={stars}
             keyExtractor={star => String(star.id)}
             renderItem={({ item }) => (
