@@ -71,23 +71,26 @@ export default class User extends Component {
     });
   };
 
-  loadMore = async () => {
+  loadMore = () => {
     const { page } = this.state;
 
-    await this.setState({
-      page: page + 1,
-    });
-
-    this.getStars();
+    this.setState(
+      {
+        page: page + 1,
+      },
+      this.getStars
+    );
   };
 
-  refreshList = async () => {
-    await this.setState({
-      stars: [],
-      page: 1,
-      refreshing: true,
-    });
-    this.getStars();
+  refreshList = () => {
+    this.setState(
+      {
+        stars: [],
+        page: 1,
+        refreshing: true,
+      },
+      this.getStars
+    );
   };
 
   handleRepositoryAccess = repository => {
